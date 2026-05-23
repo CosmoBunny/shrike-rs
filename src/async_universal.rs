@@ -74,23 +74,23 @@ impl<'a, SPI: SpiBus, EN: OutputPin, PWR: OutputPin, SS: OutputPin, D: DelayNs> 
 {
     async fn flash(&mut self, bin: &[u8]) -> Result<(), FlashError> {
         // Reset for moment
-        self.set_low_pwr().await?;
-        self.set_high_en().await?;
+        self.set_low_pwr()?;
+        self.set_high_en()?;
         self.delay.delay_ms(500).await;
 
         // Power Up FPGA
-        self.set_low_ss().await?;
-        self.set_low_en().await?;
-        self.set_low_pwr().await?;
+        self.set_low_ss()?;
+        self.set_low_en()?;
+        self.set_low_pwr()?;
         self.delay.delay_ms(100).await;
-        self.set_high_en().await?;
-        self.set_high_pwr().await?;
+        self.set_high_en()?;
+        self.set_high_pwr()?;
         self.delay.delay_ms(100).await;
 
         // Start SPI Interface
-        self.set_high_ss().await?;
+        self.set_high_ss()?;
         self.delay.delay_ms(2).await;
-        self.set_low_ss().await?;
+        self.set_low_ss()?;
 
         // Tranfer the data in 4096 chunks wise.
         for chunk in bin.chunks(4096) {
@@ -100,7 +100,7 @@ impl<'a, SPI: SpiBus, EN: OutputPin, PWR: OutputPin, SS: OutputPin, D: DelayNs> 
                 .map_err(|_| FlashError::SpiWriteError)?;
         }
 
-        self.set_high_ss().await?;
+        self.set_high_ss()?;
         self.delay.delay_ms(100).await;
 
         Ok(())

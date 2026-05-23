@@ -2,7 +2,7 @@
 use crate::{error::FlashError, universal::UniversalSPIflash};
 
 #[cfg(not(feature = "embassy"))]
-use rp2040_hal::{
+use rp235x_hal::{
     Clock, Spi,
     clocks::PeripheralClock,
     fugit::RateExtU32,
@@ -11,14 +11,15 @@ use rp2040_hal::{
         bank0::{Gpio0, Gpio1, Gpio2, Gpio3, Gpio12, Gpio13},
     },
 };
+
 #[cfg(not(feature = "embassy"))]
-use rp2040_pac::{RESETS, SPI0};
+use rp235x_hal::pac::{RESETS, SPI0};
 
 #[cfg(not(feature = "embassy"))]
 use embedded_hal::delay::DelayNs;
 
 #[cfg(not(feature = "embassy"))]
-pub fn init_rp2040_normal<D: DelayNs>(
+pub fn init_rp2350_normal<D: DelayNs>(
     clock: &PeripheralClock,
     resets: &mut RESETS,
     spi: SPI0,
@@ -32,13 +33,13 @@ pub fn init_rp2040_normal<D: DelayNs>(
     bin: &[u8],
 ) -> Result<(), FlashError> {
     use crate::universal::Flash;
-    let mosi = mosi.into_function::<rp2040_hal::gpio::FunctionSpi>();
-    let miso = miso.into_function::<rp2040_hal::gpio::FunctionSpi>();
-    let sclk = sclk.into_function::<rp2040_hal::gpio::FunctionSpi>();
+    let mosi = mosi.into_function::<rp235x_hal::gpio::FunctionSpi>();
+    let miso = miso.into_function::<rp235x_hal::gpio::FunctionSpi>();
+    let sclk = sclk.into_function::<rp235x_hal::gpio::FunctionSpi>();
 
-    let en = en.into_function::<rp2040_hal::gpio::FunctionSioOutput>();
-    let ss = ss.into_function::<rp2040_hal::gpio::FunctionSioOutput>();
-    let pwr = pwr.into_function::<rp2040_hal::gpio::FunctionSioOutput>();
+    let en = en.into_function::<rp235x_hal::gpio::FunctionSioOutput>();
+    let ss = ss.into_function::<rp235x_hal::gpio::FunctionSioOutput>();
+    let pwr = pwr.into_function::<rp235x_hal::gpio::FunctionSioOutput>();
 
     let spi = Spi::<_, _, _, 8>::new(spi, (mosi, miso, sclk)).init(
         resets,
@@ -64,7 +65,7 @@ pub mod async_rp {
         async_universal::UniversalAsyncSPIflash, error::FlashError, universal::UniversalSPIflash,
     };
 
-    pub async fn init_rp2040_blocking_async(
+    pub async fn init_rp2350_blocking_async(
         spi: Peri<'static, SPI0>,
         en: Peri<'static, PIN_13>,
         pwr: Peri<'static, PIN_12>,
@@ -90,7 +91,7 @@ pub mod async_rp {
         flash.flash(bin).await
     }
 
-    pub async fn init_rp2040_all_async(
+    pub async fn init_rp2350_all_async(
         spi: Peri<'static, SPI0>,
         en: Peri<'static, PIN_13>,
         pwr: Peri<'static, PIN_12>,
@@ -124,7 +125,7 @@ pub mod async_rp {
     });
 
     #[task]
-    pub async fn spawn_rp2040_all_async(
+    pub async fn spawn_rp2350_all_async(
         spi: Peri<'static, SPI0>,
         en: Peri<'static, PIN_13>,
         pwr: Peri<'static, PIN_12>,
