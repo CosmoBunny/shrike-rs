@@ -1,0 +1,17 @@
+[package]
+name = "shrike-esp"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+shrike-core = { path = "../shrike-core" }
+embedded-hal = "1.0.*"
+embedded-hal-async = "1.0.*"
+esp-hal = { version = "1.1.1", features = ["esp32s3", "unstable"] }
+embassy-executor = { version = "0.10.*", optional = true }
+embassy-time = { version = "0.5.*", optional = true }
+static_cell = "2.1.0"
+
+[features]
+default = []
+embassy = ["dep:embassy-executor", "dep:embassy-time", "shrike-core/embassy"]
