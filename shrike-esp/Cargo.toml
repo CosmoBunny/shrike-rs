@@ -2,6 +2,10 @@
 name = "shrike-esp"
 version = "0.1.0"
 edition = "2024"
+description = "ESP32-specific implementation for flashing FPGAs using shrike-core."
+license = "MIT"
+keywords = ["embedded", "fpga", "esp32", "esp-hal", "no_std"]
+repository = "https://github.com/CosmoBunny/shrike-rs"
 
 [dependencies]
 shrike-core = { version = "0.1.0", path = "../shrike-core" }
