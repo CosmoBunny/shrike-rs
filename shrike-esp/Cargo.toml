@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-shrike-core = { path = "../shrike-core" }
+shrike-core = { version = "0.1.0", path = "../shrike-core" }
 embedded-hal = "1.0.*"
 embedded-hal-async = "1.0.*"
 esp-hal = { version = "1.1.1", features = ["esp32s3", "unstable"] }
